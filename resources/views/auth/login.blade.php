@@ -9,16 +9,26 @@
     <div class="accountbg"></div>
     <div class="wrapper-page">
         <div class="card">
+            
             <div class="card-body">
                 <h3 class="text-center mt-0 mb-3">
                     <a href="/" class="logo"><img src="{{ asset('assets/images/tech-data.png')}}" height="40" alt="logo-img"></a>
                 </h3>
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                {{ $error }}<br />
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                 <h4 class="text-center mt-0 text-color"><b>Sign In</b></h4>
                 <form class="form-horizontal mt-3 mx-3" action="{{ route('login') }}" method="POST" id="loginForm">
                     @csrf
                     <div class="form-group mb-3">
                         <div class="col-12">
-                            <input class="form-control" type="text" required="" name="name" id="name" placeholder="Username">
+                            <input class="form-control" type="text" required="" name="email" id="email" placeholder="Email">
                         </div>
                     </div>
                     <div class="form-group mb-3">

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -61,12 +62,47 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \App\Models\User
      */
-    protected function create(array $data)
+    protected function create(Request $request)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
+        // return User::create([
+        //     'name' => $data['name'],
+        //     'email' => $data['email'],
+        //     'password' => Hash::make($data['password']),
+        // ]);
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'mobile' => 'required|digits:10',
+            'password' => [
+                'required',
+                'min:8',               // Minimum 8 characters
+                'regex:/[A-Z]/',       // At least one uppercase letter
+                'regex:/[a-z]/',       // At least one lowercase letter
+                'regex:/[0-9]/',       // At least one digit
+                'regex:/[@$!%*?&]/',   // At least one special character
+                'confirmed'            // Password confirmation (add password_confirmation field in the form)
+            ],
+            'organization' => 'required|string|max:255',
+            'job_title' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'country' => 'required|string',
         ]);
+    
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+    
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'mobile' => $request->mobile,
+            'password' => Hash::make($request->password),
+            'organization' => $request->organization,
+            'job_title' => $request->job_title,
+            'city' => $request->city,
+            'country' => $request->country,
+        ]);
+    
+        return redirect()->route('login')->with('success', 'Registration successful!');
     }
 }

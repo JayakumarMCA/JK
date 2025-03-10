@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Spatie\Permission\Models\Permission;
 use App\Http\Controllers\Controller;
-
+use Auth;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
@@ -29,7 +29,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/admin/dashboard';
+    protected $redirectTo = '/dashboard';
 
     /**
      * Create a new controller instance.
@@ -45,14 +45,12 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        dd("hii");
         $request->validate([
-            // 'email'    => 'required|email',
-            'name'    => 'required|name',
+            'email'    => 'required|email',
             'password' => 'required',
         ]);
 
-        if (Auth::attempt($request->only('name', 'password'))) {
+        if (Auth::attempt($request->only('email', 'password'))) {
             return redirect()->intended('/dashboard');
         }
 
