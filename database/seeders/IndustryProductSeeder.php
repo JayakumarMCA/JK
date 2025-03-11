@@ -23,11 +23,11 @@ class IndustryProductSeeder extends Seeder
         ]);
 
         DB::table('asset_types')->insert([
-            ['name' => 'Video','type'   =>  ".mov,.mp4"],
-            ['name' => 'Audio','type'   => ".mp3,.mp4,.mpeg" ],
-            ['name' => 'PPT','type'     => "" ],
-            ['name' => 'Docs/PDF','type'=> "Brochure, Battelcard, sales Play" ],
-            ['name' => 'Images','type'  =>  ".png, .jpg, .jpeg, .tif, .gif, .html"],
+            ['name' => 'Video','type'   => "mov,mp4"],
+            ['name' => 'Audio','type'   => "mp3,mp4,mpeg" ],
+            ['name' => 'PPT','type'     => "ppt" ],
+            ['name' => 'Docs/PDF','type'=> "doc,pdf" ],
+            ['name' => 'Images','type'  => "png,jpg,jpeg,tif,gif,html"],
         ]);
 
         DB::table('asset_utilizations')->insert([

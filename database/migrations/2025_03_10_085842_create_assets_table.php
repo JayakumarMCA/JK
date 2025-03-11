@@ -12,6 +12,7 @@ return new class extends Migration {
             $table->string('title');
             $table->string('file');
             $table->unsignedBigInteger('industry_id');
+            $table->string('other_industry')->nullable();
             $table->unsignedBigInteger('product_id');
             $table->unsignedBigInteger('asset_type_id');
             $table->unsignedBigInteger('utilization_id');

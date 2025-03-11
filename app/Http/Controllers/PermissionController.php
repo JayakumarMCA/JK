@@ -10,6 +10,13 @@ class PermissionController extends Controller
         /**
          * Display a listing of the permissions.
          */
+        public function __construct()
+        {
+            $this->middleware('permission:permission-list', ['only' => ['index']]);
+            $this->middleware('permission:permission-create', ['only' => ['create', 'store']]);
+            $this->middleware('permission:permission-edit', ['only' => ['edit', 'update']]);
+            $this->middleware('permission:permission-delete', ['only' => ['destroy']]);
+        }
         public function index()
         {
             $permissions = Permission::all();

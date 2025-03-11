@@ -16,9 +16,11 @@
                             <div class="col-md-8">
                                 <h4 class="card-title">Roles</h4>
                             </div>
-                            <div class="col-md-4 text-end">
-                                <a href="{{ route('roles.create') }}" class="btn btn-primary text-end">Add Role</a>
-                            </div>
+                            @can('role-create')
+                                <div class="col-md-4 text-end">
+                                    <a href="{{ route('roles.create') }}" class="btn btn-primary text-end">Add Role</a>
+                                </div>
+                            @endcan
                         </div>
                         <!-- <p class="card-title-desc">This is an experimental awesome solution for responsive tables with complex data.</p> -->
 
@@ -38,11 +40,15 @@
                                             <td>{{ $role->name }}</td>
                                             <td>{{ $role->created_at ? date('d M-y',strtotime($role->created_at)) : '' }}</td>
                                             <td>
-                                                <a href="{{ route('roles.edit', $role->id) }}" class="btn btn-warning">Edit</a>
-                                                <form action="{{ route('roles.destroy', $role->id) }}" method="POST" style="display: inline;">
-                                                    @csrf @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger">Delete</button>
-                                                </form>
+                                                @can('role-edit')
+                                                    <a href="{{ route('roles.edit', $role->id) }}" class="btn btn-warning">Edit</a>
+                                                @endcan
+                                                @can('role-delete')
+                                                    <form action="{{ route('roles.destroy', $role->id) }}" method="POST" style="display: inline;">
+                                                        @csrf @method('DELETE')
+                                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                                    </form>
+                                                @endcan
                                             </td>
                                         </tr>
                                         @endforeach
@@ -62,8 +68,8 @@
 @endsection
 @section('js')
  <!-- Responsive Table js -->
- <script src="assets/libs/admin-resources/rwd-table/rwd-table.min.js"></script>
+ <script src="{{asset('assets/libs/admin-resources/rwd-table/rwd-table.min.js')}}"></script>
 
 <!-- Init js -->
-<script src="assets/js/pages/table-responsive.init.js"></script>
+<script src="{{asset('assets/js/pages/table-responsive.init.js')}}"></script>
 @endsection

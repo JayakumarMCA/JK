@@ -42,12 +42,21 @@
                                         <i class="ri-mastercard-line me-1"></i>Masters <div class="arrow-down"></div>
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="topnav-apps">
-
-                                        <a href="#" class="dropdown-item">Users</a>
-                                        <a href="#" class="dropdown-item">Assets</a>
-                                        <a href="#" class="dropdown-item">Event</a>
-                                        <a href="#" class="dropdown-item">Campaign</a>
-                                        <a href="#" class="dropdown-item">Support Enquiry</a>
+                                        @canAny(['user-list','asset-list','event-list','campaign-list'])
+                                            @can('user-list')
+                                                <a href="{{route('users.index')}}" class="dropdown-item">Users</a>
+                                            @endcan
+                                            @can('asset-list')
+                                                <a href="{{route('assetdatas.index')}}" class="dropdown-item">Assets</a>
+                                            @endcan
+                                            @can('event-list')
+                                                <a href="{{route('events.index')}}" class="dropdown-item">Event</a>
+                                            @endcan
+                                            @can('campaign-list')
+                                                <a href="#" class="dropdown-item">Campaign</a>
+                                            @endcan
+                                            <a href="#" class="dropdown-item">Support Enquiry</a>
+                                        @endcan
                                     </div>
                                 </li>
 

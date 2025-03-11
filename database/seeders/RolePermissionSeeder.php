@@ -12,29 +12,66 @@ class RolePermissionSeeder extends Seeder
     {
         // Create Roles
         $admin = Role::create(['name' => 'admin']);
-        $editor = Role::create(['name' => 'editor']);
+        $superAdmin = Role::create(['name' => 'super-admin']);
         $user = Role::create(['name' => 'user']);
 
-        // Create Permissions
+        // Define Permissions
         $permissions = [
-            'view users',
-            'edit users',
-            'delete users',
-            'create users',
-            'view roles',
-            'edit roles',
-            'delete roles',
-            'create roles'
+            'role-list',
+            'role-create',
+            'role-edit',
+            'role-delete',
+            'permission-list',
+            'permission-create',
+            'permission-edit',
+            'permission-delete',
+            'user-list',
+            'user-create',
+            'user-edit',
+            'user-delete',
+            'event-list',
+            'event-create',
+            'event-edit',
+            'event-delete',
+            'asset-list',
+            'asset-create',
+            'asset-edit',
+            'asset-delete',
+            'campaign-list',
+            'campaign-create',
+            'campaign-edit',
+            'campaign-delete',
         ];
 
+        // Create Permissions
         foreach ($permissions as $permission) {
-            Permission::create(['name' => $permission]);
+            Permission::firstOrCreate(['name' => $permission]);
         }
 
         // Assign Permissions to Roles
-        $admin->givePermissionTo($permissions);
-        $editor->givePermissionTo(['view users', 'edit users']);
-        $user->givePermissionTo(['view users']);
+        $admin->syncPermissions($permissions); // Admin gets all permissions
+
+        $superAdminPermissions = [
+            'role-list',
+            'role-create',
+            'role-edit',
+            'permission-list',
+            'permission-create',
+            'permission-edit',
+            'user-list',
+            'user-create',
+            'user-edit',
+            'event-list',
+            'event-create',
+            'event-edit',
+            'asset-list',
+            'asset-create',
+            'asset-edit',
+            'campaign-list',
+            'campaign-create',
+            'campaign-edit',
+        ];
+        $superAdmin->syncPermissions($superAdminPermissions); // No delete permissions
+
     }
 }
-

@@ -16,9 +16,11 @@
                             <div class="col-md-8">
                                 <h4 class="card-title">Permissions</h4>
                             </div>
-                            <div class="col-md-4 text-end">
-                                <a href="{{ route('permissions.create') }}" class="btn btn-primary text-end">Add Permission</a>
-                            </div>
+                            @can('permission-create')
+                                <div class="col-md-4 text-end">
+                                    <a href="{{ route('permissions.create') }}" class="btn btn-primary text-end">Add Permission</a>
+                                </div>
+                            @endcan
                         </div>
                         <!-- <p class="card-title-desc">This is an experimental awesome solution for responsive tables with complex data.</p> -->
 
@@ -38,11 +40,16 @@
                                             <td>{{ $permission->name }}</td>
                                             <td>{{ $permission->created_at ? date('d M-y',strtotime($permission->created_at)) : '' }}</td>
                                             <td>
-                                                <a href="{{ route('permissions.edit', $permission->id) }}" class="btn btn-warning">Edit</a>
-                                                <form action="{{ route('permissions.destroy', $permission->id) }}" method="POST" style="display: inline;">
-                                                    @csrf @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger">Delete</button>
-                                                </form>
+                                                @can('permission-edit')
+                                                    <a href="{{ route('permissions.edit', $permission->id) }}" class="btn btn-warning">Edit</a>
+                                                @endcan
+                                                @can('permission-delete')
+                                                    <form action="{{ route('permissions.destroy', $permission->id) }}" method="POST" style="display: inline;">
+                                                        @csrf @method('DELETE')
+                                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                                    </form>
+                                                @endcan
+
                                             </td>
                                         </tr>
                                         @endforeach

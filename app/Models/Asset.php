@@ -18,6 +18,7 @@ class Asset extends Model
         'utilization_id',
         'language_id',
         'country_id',
+        'other_industry'
     ];
 
     // Relationships
@@ -38,7 +39,7 @@ class Asset extends Model
 
     public function utilization()
     {
-        return $this->belongsTo(Utilization::class);
+        return $this->belongsTo(AssetUtilization::class);
     }
 
     public function language()

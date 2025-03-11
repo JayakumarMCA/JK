@@ -14,9 +14,11 @@
                             <div class="col-md-8">
                                 <h4 class="card-title">Assets List</h4>
                             </div>
-                            <div class="col-md-4 text-end">
-                                <a href="{{ route('assetdatas.create') }}" class="btn btn-primary text-end">Add New Asset</a>
-                            </div>
+                            @can('asset-create')
+                                <div class="col-md-4 text-end">
+                                    <a href="{{ route('assetdatas.create') }}" class="btn btn-primary text-end">Add New Asset</a>
+                                </div>
+                            @endcan
                         </div>
                         <div class="table-rep-plugin mt-3">
                             <div class="table-responsive mb-0" data-pattern="priority-columns">
@@ -50,12 +52,16 @@
                                                 <td>{{ $asset->language->name ?? 'N/A' }}</td>
                                                 <td>{{ $asset->country->name ?? 'N/A' }}</td>
                                                 <td>
-                                                    <a href="{{ route('assetdatas.edit', $asset->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                                                    <form action="{{ route('assetdatas.destroy', $asset->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure?');">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                                                    </form>
+                                                    @can('asset-edit')
+                                                        <a href="{{ route('assetdatas.edit', $asset->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                                                    @endcan
+                                                    @can('asset-delete')
+                                                        <form action="{{ route('assetdatas.destroy', $asset->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure?');">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                                        </form>
+                                                    @endcan
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -72,8 +78,8 @@
 @endsection
 @section('js')
  <!-- Responsive Table js -->
- <script src="assets/libs/admin-resources/rwd-table/rwd-table.min.js"></script>
+ <script src="{{ asset('assets/libs/admin-resources/rwd-table/rwd-table.min.js')}}"></script>
 
 <!-- Init js -->
-<script src="assets/js/pages/table-responsive.init.js"></script>
+<script src="{{ asset('assets/js/pages/table-responsive.init.js')}}"></script>
 @endsection
