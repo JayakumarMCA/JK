@@ -14,7 +14,9 @@ return new class extends Migration {
             $table->date('date');
             $table->time('time');
             $table->string('location');
+            $table->string('link')->nullable();
             $table->foreignId('country_id')->constrained('countries')->onDelete('cascade');
+            $table->foreignId('language_id')->constrained('languages')->onDelete('cascade');
             $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });

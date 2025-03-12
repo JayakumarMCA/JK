@@ -7,6 +7,13 @@ use Illuminate\Http\Request;
 use Auth;
 class EnquiryController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:enquiry-list', ['only' => ['index']]);
+        $this->middleware('permission:enquiry-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:enquiry-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:enquiry-delete', ['only' => ['destroy']]);
+    }
     public function index()
     {
         $enquiries = Enquiry::with('user')->get();
@@ -32,7 +39,7 @@ class EnquiryController extends Controller
         $inputs['user_id']  =   Auth::user()->id;
         Enquiry::create($inputs);
 
-        return redirect()->route('enquiries.index')->with('success', 'Enquiry created successfully.');
+        return redirect()->route('enquiries.create')->with('success', 'Enquiry created successfully.');
     }
 
     // Show a single enquiry

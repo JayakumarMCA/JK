@@ -14,9 +14,11 @@
                             <div class="col-md-8">
                                 <h4 class="card-title">Enquiry List</h4>
                             </div>
-                            <div class="col-md-4 text-end">
-                                <a href="{{ route('enquiries.create') }}" class="btn btn-primary text-end">Add New Enquiry</a>
-                            </div>
+                            @can('enquiry-create')
+                                <div class="col-md-4 text-end">
+                                    <a href="{{ route('enquiries.create') }}" class="btn btn-primary text-end">Add New Enquiry</a>
+                                </div>
+                            @endcan
                         </div>
                         <div class="table-rep-plugin mt-3">
                             <div class="table-responsive mb-0" data-pattern="priority-columns">

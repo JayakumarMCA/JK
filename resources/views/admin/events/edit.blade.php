@@ -83,6 +83,17 @@
                                     </div>
                                 </div>
 
+                                <!-- Link -->
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Link</label>
+                                        <input type="text" class="form-control" name="link" value="{{ old('link', $event->link) }}" required>
+                                        @error('link')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                </div>
+
                                 <!-- Country -->
                                 <div class="col-md-6">
                                     <div class="mb-3">
@@ -96,6 +107,23 @@
                                             @endforeach
                                         </select>
                                         @error('country_id')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <!-- Language -->
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Language</label>
+                                        <select name="language_id" class="form-control" required>
+                                            <option value="">Select Language</option>
+                                            @foreach($languages as $language)
+                                                <option value="{{ $language->id }}" {{ old('language_id', $event->language_id) == $language->id ? 'selected' : '' }}>
+                                                    {{ $language->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error('language_id')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>

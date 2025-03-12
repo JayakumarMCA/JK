@@ -1,9 +1,10 @@
 @extends('admin.layouts.master')
 
 @php
-    $page_title = 'Techdata || Page';
-    $page_name = 'Techdata || Page';
+    $page_title = 'Techdata || Asset';
+    $page_name = 'Techdata || Asset';
 @endphp
+
 @section('content')
 <div class="page-content mainpage-content">
     <img class="img-fluid w-100" style="margin-top: 10px;" src="{{ asset('assets/images/techbanner.png')}}" />
@@ -12,112 +13,77 @@
         <div class="row">
             <!-- Filter Bar -->
             <div class="col-12 col-lg-3">
-                <!-- Filter Wrapper (One Set for Desktop & Mobile) -->
+                <!-- Filter Wrapper -->
                 <div class="filter-container">
-                    <!-- Mobile Button to Open Filter Drawer -->
-                    <!-- <button class="btn btn-dark d-md-none topcustombtn" data-bs-toggle="offcanvas" data-bs-target="#filterDrawer">
-        Open Filters
-    </button> -->
-                    <button class="topcustombtn btn btn-primary d-md-none waves-effect waves-light" data-bs-toggle="offcanvas" data-bs-target="#filterDrawer">Open Filters <i class="ri-filter-2-line align-middle ms-1"></i></button>
+                    <button class="topcustombtn btn btn-primary d-md-none waves-effect waves-light" data-bs-toggle="offcanvas" data-bs-target="#filterDrawer">
+                        Open Filters <i class="ri-filter-2-line align-middle ms-1"></i>
+                    </button>
 
-                    <!-- The Only Set of Filters (With Titles) -->
+                    <!-- Filters -->
                     <div class="filters" id="filters">
+                        <!-- Industry Filter -->
                         <div class="mb-2 filterborder pb-4">
                             <label class="fw-bold">Industry</label>
-                            <div class="form-check d-flex gap-2 align-items-center">
-                                <input class="form-check-input" type="checkbox" id="m-category1" />
-                                <label class="form-check-label ratinglabel" for="m-category1">Architecture, Engineering, Construction</label>
-                            </div>
-                            <div class="form-check d-flex gap-2 align-items-center mt-2">
-                                <input class="form-check-input" type="checkbox" id="m-category1" />
-                                <label class="form-check-label ratinglabel" for="m-category1">Product Design & Manufacturing</label>
-                            </div>
-                            <div class="form-check d-flex gap-2 align-items-center mt-2">
-                                <input class="form-check-input" type="checkbox" id="m-category1" />
-                                <label class="form-check-label ratinglabel" for="m-category1">Media & Entertainment</label>
-                            </div>
-                            <div class="form-check d-flex gap-2 align-items-center mt-2">
-                                <input class="form-check-input" type="checkbox" id="m-category1" />
-                                <label class="form-check-label ratinglabel" for="m-category1">Others</label>
-                            </div>
+                            @foreach($industries as $id => $industry)
+                                <div class="form-check d-flex gap-2 align-items-center">
+                                    <input class="form-check-input filter-option" type="checkbox" data-filter="industry" value="{{$industry->id}}" />
+                                    <label class="form-check-label ratinglabel">{{$industry->name}}</label>
+                                </div>
+                            @endforeach
                         </div>
 
+                        <!-- Product Filter -->
                         <div class="mb-2 filterborder pb-4">
                             <label class="fw-bold">Product</label>
-                            <div class="form-check d-flex gap-2 align-items-center">
-                                <input class="form-check-input" type="checkbox" id="m-category1" />
-                                <label class="form-check-label ratinglabel" for="m-category1">AutoCAD IST</label>
-                            </div>
-                            <div class="form-check d-flex gap-2 align-items-center mt-2">
-                                <input class="form-check-input" type="checkbox" id="m-category1" />
-                                <label class="form-check-label ratinglabel" for="m-category1">AutoCAD LT</label>
-                            </div>
-                            <div class="form-check d-flex gap-2 align-items-center mt-2">
-                                <input class="form-check-input" type="checkbox" id="m-category1" />
-                                <label class="form-check-label ratinglabel" for="m-category1">Revit LT Suite</label>
-                            </div>
-                            <div class="form-check d-flex gap-2 align-items-center mt-2">
-                                <input class="form-check-input" type="checkbox" id="m-category1" />
-                                <label class="form-check-label ratinglabel" for="m-category1">3ds MAX</label>
-                            </div>
+                            @foreach($products as $product)
+                                <div class="form-check d-flex gap-2 align-items-center">
+                                    <input class="form-check-input filter-option" type="checkbox" data-filter="product" value="{{ $product->id ?? ''}}" />
+                                    <label class="form-check-label ratinglabel">{{ $product->name ?? ''}}</label>
+                                </div>
+                            @endforeach
                         </div>
 
+                        <!-- Asset Type Filter -->
                         <div class="mb-2 filterborder pb-4">
                             <label class="fw-bold">Asset Type</label>
-                            <div class="form-check d-flex gap-2 align-items-center">
-                                <input class="form-check-input" type="checkbox" id="m-category1" />
-                                <label class="form-check-label ratinglabel" for="m-category1">Video</label>
-                            </div>
-                            <div class="form-check d-flex gap-2 align-items-center mt-2">
-                                <input class="form-check-input" type="checkbox" id="m-category1" />
-                                <label class="form-check-label ratinglabel" for="m-category1">Audio</label>
-                            </div>
-                            <div class="form-check d-flex gap-2 align-items-center mt-2">
-                                <input class="form-check-input" type="checkbox" id="m-category1" />
-                                <label class="form-check-label ratinglabel" for="m-category1">PPT</label>
-                            </div>
-                            <div class="form-check d-flex gap-2 align-items-center mt-2">
-                                <input class="form-check-input" type="checkbox" id="m-category1" />
-                                <label class="form-check-label ratinglabel" for="m-category1">Docs/PDF</label>
-                            </div>
-                            <div class="form-check d-flex gap-2 align-items-center mt-2">
-                                <input class="form-check-input" type="checkbox" id="m-category1" />
-                                <label class="form-check-label ratinglabel" for="m-category1">Images</label>
-                            </div>
+                            @foreach($assetTypes as $assettype)
+                                <div class="form-check d-flex gap-2 align-items-center">
+                                    <input class="form-check-input filter-option" type="checkbox" data-filter="asset_type" value="{{ $assettype->id ?? '' }}" />
+                                    <label class="form-check-label ratinglabel">{{ $assettype->name ?? '' }}</label>
+                                </div>
+                            @endforeach
                         </div>
 
+                        <!-- Utilization Filter -->
                         <div class="mb-2 filterborder pb-4">
-                            <label class="fw-bold">Ultilization</label>
-                            <div class="form-check d-flex gap-2 align-items-center">
-                                <input class="form-check-input" type="checkbox" id="m-category1" />
-                                <label class="form-check-label ratinglabel" for="m-category1">Partner Centric</label>
-                            </div>
-                            <div class="form-check d-flex gap-2 align-items-center mt-2">
-                                <input class="form-check-input" type="checkbox" id="m-category1" />
-                                <label class="form-check-label ratinglabel" for="m-category1">Customer Centric</label>
-                            </div>
+                            <label class="fw-bold">Utilization</label>
+                            @foreach($utilizations as $utilization)
+                                <div class="form-check d-flex gap-2 align-items-center">
+                                    <input class="form-check-input filter-option" type="checkbox" data-filter="utilization" value="{{ $utilization->id ?? '' }}" />
+                                    <label class="form-check-label ratinglabel">{{ $utilization->name ?? '' }}</label>
+                                </div>
+                            @endforeach
                         </div>
 
+                        <!-- Language Filter -->
                         <div class="mb-2 filterborder pb-4">
                             <label class="fw-bold">Language</label>
-                            <select class="form-select">
-                                <option selected>Choose Language</option>
-                                <option value="English">English</option>
-                                <option value="Vietnam">Vietnam</option>
-                                <option value="Cantonese">Cantonese</option>
-                                <option value="Bahasa">Bahasa</option>
+                            <select class="form-select" id="language">
+                                <option value="">Choose Language</option>
+                                @foreach($languages as $language)
+                                    <option value="{{$language->id ?? ''}}">{{$language->name ?? ''}}</option>
+                                @endforeach
                             </select>
                         </div>
 
+                        <!-- Country Filter -->
                         <div class="mb-2">
                             <label class="fw-bold">Country</label>
-                            <select class="form-select">
-                                <option selected>Select Country</option>
-                                <option value="India">India</option>
-                                <option value="HongKong">HongKong</option>
-                                <option value="Singapore">Singapore</option>
-                                <option value="Malaysia">Malaysia</option>
-                                <option value="Vietnam">Vietnam</option>
+                            <select class="form-select" id="country">
+                                <option value="">Select Country</option>
+                                @foreach($countries as $county)
+                                    <option value="{{ $county->id ?? '' }}">{{ $county->name ?? '' }}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -130,7 +96,6 @@
                         <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
                     </div>
                     <div class="offcanvas-body">
-                        <!-- Move the same filters inside offcanvas -->
                         <div id="filterPlaceholder"></div>
                     </div>
                 </div>
@@ -138,7 +103,7 @@
             <!-- Filter Bar -->
 
             <div class="col-12 col-lg-9">
-                <!-- start page title -->
+                <!-- Page Title -->
                 <div class="row mt-lg-0 mt-4">
                     <div class="col-12">
                         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
@@ -146,268 +111,148 @@
 
                             <div class="page-title-right">
                                 <div class="d-flex gap-3">
-                                    <button class="topcustombtn btn btn-primary waves-effect waves-light">Download <i class="ri-download-line align-middle ms-1"></i></button>
+                                    <button class="topcustombtn btn btn-primary waves-effect waves-light" id="bulk-download-btn">Download <i class="ri-download-line align-middle ms-1"></i></button>
                                     <button class="topcustombtn btn btn-primary waves-effect waves-light">Email <i class="ri-mail-line align-middle ms-1"></i></button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- end page title -->
 
-                <div class="row mb-4">
-                    <div class="card-group gap-4">
-                        <!-- 01 -->
-                        <div class="card">
-                            <img class="w-100" src="{{ asset('assets/images/products/course-1-img.jpg')}}" />
-                            <div class="card-body">
-                                <h5 class="card-title">Advanced Solutions</h5>
-                            </div>
-                            <div class="card-footer">
-                                <div class="form-check d-flex gap-2 align-items-center justify-content-between">
-                                    <input class="form-check-input" type="checkbox" id="m-category1" />
-                                    <button type="button" class="custombtn">Download <i class="ri-download-line align-middle ms-2"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- 01 -->
-
-                        <!-- 02 -->
-                        <div class="card">
-                            <img class="w-100" src="{{ asset('assets/images/products/course-3-img.jpg')}}" />
-                            <div class="card-body">
-                                <h5 class="card-title">Technical Support</h5>
-                            </div>
-                            <div class="card-footer">
-                                <div class="form-check d-flex gap-2 align-items-center justify-content-between">
-                                    <input class="form-check-input" type="checkbox" id="m-category1" />
-                                    <button type="button" class="custombtn">Download <i class="ri-download-line align-middle ms-2"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- 02 -->
-
-                        <!-- 03 -->
-                        <div class="card">
-                            <img class="w-100" src="{{ asset('assets/images/products/course-8-img.jpg')}}" />
-                            <div class="card-body">
-                                <h5 class="card-title">Social Post</h5>
-                            </div>
-                            <div class="card-footer">
-                                <div class="form-check d-flex gap-2 align-items-center justify-content-between">
-                                    <input class="form-check-input" type="checkbox" id="m-category1" />
-                                    <button type="button" class="custombtn">Download <i class="ri-download-line align-middle ms-2"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- 03 -->
-
-                        <!-- 03 -->
-                        <div class="card">
-                            <img class="w-100" src="{{ asset('assets/images/products/course-12-img.jpg')}}" />
-                            <div class="card-body">
-                                <h5 class="card-title">Marketing Capabilities</h5>
-                            </div>
-                            <div class="card-footer">
-                                <div class="form-check d-flex gap-2 align-items-center justify-content-between">
-                                    <input class="form-check-input" type="checkbox" id="m-category1" />
-                                    <button type="button" class="custombtn">Download <i class="ri-download-line align-middle ms-2"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- 03 -->
-
-                        <!-- 03 -->
-                        <div class="card">
-                            <img class="w-100" src="{{ asset('assets/images/products/course-13-img.jpg')}}" />
-                            <div class="card-body">
-                                <h5 class="card-title">Managed Services</h5>
-                            </div>
-                            <div class="card-footer">
-                                <div class="form-check d-flex gap-2 align-items-center justify-content-between">
-                                    <input class="form-check-input" type="checkbox" id="m-category1" />
-                                    <button type="button" class="custombtn">Download <i class="ri-download-line align-middle ms-2"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- 03 -->
-
-                        <!-- 03 -->
-                        <div class="card">
-                            <img class="w-100" src="{{ asset('assets/images/products/course-14-img.jpg')}}" />
-                            <div class="card-body">
-                                <h5 class="card-title">Managed Services</h5>
-                            </div>
-                            <div class="card-footer">
-                                <div class="form-check d-flex gap-2 align-items-center justify-content-between">
-                                    <input class="form-check-input" type="checkbox" id="m-category1" />
-                                    <button type="button" class="custombtn">Download <i class="ri-download-line align-middle ms-2"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- 03 -->
-
-                        <!-- 03 -->
-                        <div class="card">
-                            <img class="w-100" src="{{ asset('assets/images/products/course-12-img.jpg')}}" />
-                            <div class="card-body">
-                                <h5 class="card-title">ISV Solutions Factory</h5>
-                            </div>
-                            <div class="card-footer">
-                                <div class="form-check d-flex gap-2 align-items-center justify-content-between">
-                                    <input class="form-check-input" type="checkbox" id="m-category1" />
-                                    <button type="button" class="custombtn">Download <i class="ri-download-line align-middle ms-2"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- 03 -->
-
-                        <!-- 03 -->
-                        <div class="card">
-                            <img class="w-100" src="{{ asset('assets/images/products/course-1-img.jpg')}}" />
-                            <div class="card-body">
-                                <h5 class="card-title">Professional Services</h5>
-                            </div>
-                            <div class="card-footer">
-                                <div class="form-check d-flex gap-2 align-items-center justify-content-between">
-                                    <input class="form-check-input" type="checkbox" id="m-category1" />
-                                    <button type="button" class="custombtn">Download <i class="ri-download-line align-middle ms-2"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- 03 -->
-                    </div>
+                <!-- Asset List -->
+                <div class="row mb-4" id="asset-list">
+                    <!-- Assets will be dynamically loaded here -->
                 </div>
 
-                <div class="row mb-4">
-                    <div class="card-group gap-4">
-                        <!-- 01 -->
-                        <div class="card">
-                            <img class="w-100" src="{{ asset('assets/images/products/course-1-img.jpg')}}" />
-                            <div class="card-body">
-                                <h5 class="card-title">Advanced Solutions</h5>
-                            </div>
-                            <div class="card-footer">
-                                <div class="form-check d-flex gap-2 align-items-center justify-content-between">
-                                    <input class="form-check-input" type="checkbox" id="m-category1" />
-                                    <button type="button" class="custombtn">Download <i class="ri-download-line align-middle ms-2"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- 01 -->
-
-                        <!-- 02 -->
-                        <div class="card">
-                            <img class="w-100" src="{{ asset('assets/images/products/course-3-img.jpg')}}" />
-                            <div class="card-body">
-                                <h5 class="card-title">Technical Support</h5>
-                            </div>
-                            <div class="card-footer">
-                                <div class="form-check d-flex gap-2 align-items-center justify-content-between">
-                                    <input class="form-check-input" type="checkbox" id="m-category1" />
-                                    <button type="button" class="custombtn">Download <i class="ri-download-line align-middle ms-2"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- 02 -->
-
-                        <!-- 03 -->
-                        <div class="card">
-                            <img class="w-100" src="{{ asset('assets/images/products/course-8-img.jpg')}}" />
-                            <div class="card-body">
-                                <h5 class="card-title">Social Post</h5>
-                            </div>
-                            <div class="card-footer">
-                                <div class="form-check d-flex gap-2 align-items-center justify-content-between">
-                                    <input class="form-check-input" type="checkbox" id="m-category1" />
-                                    <button type="button" class="custombtn">Download <i class="ri-download-line align-middle ms-2"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- 03 -->
-
-                        <!-- 03 -->
-                        <div class="card">
-                            <img class="w-100" src="{{ asset('assets/images/products/course-12-img.jpg')}}" />
-                            <div class="card-body">
-                                <h5 class="card-title">Marketing Capabilities</h5>
-                            </div>
-                            <div class="card-footer">
-                                <div class="form-check d-flex gap-2 align-items-center justify-content-between">
-                                    <input class="form-check-input" type="checkbox" id="m-category1" />
-                                    <button type="button" class="custombtn">Download <i class="ri-download-line align-middle ms-2"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- 03 -->
-
-                        <!-- 03 -->
-                        <div class="card">
-                            <img class="w-100" src="{{ asset('assets/images/products/course-13-img.jpg')}}" />
-                            <div class="card-body">
-                                <h5 class="card-title">Managed Services</h5>
-                            </div>
-                            <div class="card-footer">
-                                <div class="form-check d-flex gap-2 align-items-center justify-content-between">
-                                    <input class="form-check-input" type="checkbox" id="m-category1" />
-                                    <button type="button" class="custombtn">Download <i class="ri-download-line align-middle ms-2"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- 03 -->
-
-                        <!-- 03 -->
-                        <div class="card">
-                            <img class="w-100" src="{{ asset('assets/images/products/course-14-img.jpg')}}" />
-                            <div class="card-body">
-                                <h5 class="card-title">Managed Services</h5>
-                            </div>
-                            <div class="card-footer">
-                                <div class="form-check d-flex gap-2 align-items-center justify-content-between">
-                                    <input class="form-check-input" type="checkbox" id="m-category1" />
-                                    <button type="button" class="custombtn">Download <i class="ri-download-line align-middle ms-2"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- 03 -->
-
-                        <!-- 03 -->
-                        <div class="card">
-                            <img class="w-100" src="{{ asset('assets/images/products/course-12-img.jpg')}}" />
-                            <div class="card-body">
-                                <h5 class="card-title">ISV Solutions Factory</h5>
-                            </div>
-                            <div class="card-footer">
-                                <div class="form-check d-flex gap-2 align-items-center justify-content-between">
-                                    <input class="form-check-input" type="checkbox" id="m-category1" />
-                                    <button type="button" class="custombtn">Download <i class="ri-download-line align-middle ms-2"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- 03 -->
-
-                        <!-- 03 -->
-                        <div class="card">
-                            <img class="w-100" src="{{ asset('assets/images/products/course-1-img.jpg')}}" />
-                            <div class="card-body">
-                                <h5 class="card-title">Professional Services</h5>
-                            </div>
-                            <div class="card-footer">
-                                <div class="form-check d-flex gap-2 align-items-center justify-content-between">
-                                    <input class="form-check-input" type="checkbox" id="m-category1" />
-                                    <button type="button" class="custombtn">Download <i class="ri-download-line align-middle ms-2"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- 03 -->
-                    </div>
+                <!-- Pagination -->
+                <div id="pagination">
+                    <!-- Pagination links will be dynamically loaded here -->
                 </div>
-
-                <!-- end row -->
             </div>
         </div>
     </div>
 </div>
+@endsection
 
+@section('js')
+<script>
+    $(document).ready(function() {
+        function fetchAssets(page = 1) {
+            let filters = {
+                industry: [],
+                product: [],
+                asset_type: [],
+                utilization: [],
+                language: $('#language').val() || "", 
+                country: $('#country').val() || "",
+                page: page,
+            };
 
+            // Collect selected filters
+            $('.filter-option:checked').each(function() {
+                let filterName = $(this).data('filter');
+                filters[filterName].push($(this).val());
+            });
+
+            // Send AJAX request
+            $.ajax({
+                url: "{{ route('fetch.asset') }}",
+                method: "GET",
+                data: filters,
+                beforeSend: function() {
+                    $('#asset-list').html('<p class="text-center">Loading assets...</p>');
+                },
+                success: function(response) {
+                    if (!response.data || response.data.length === 0) {
+                        $('#asset-list').html('<p class="text-center">No assets found.</p>');
+                        $('#pagination').html('');
+                        return;
+                    }
+
+                    // Render assets
+                    let assetsHtml = '';
+                    $.each(response.data, function(index, asset) {
+                        assetsHtml += `
+                            <div class="col-12 col-md-3 col-lg-3 mb-4">
+                                <div class="card">
+                                    <img class="w-100" src="{{ asset('storage/') }}/${asset.file}" />
+                                    <div class="card-body">
+                                        <h5 class="card-title">${asset.title}</h5>
+                                    </div>
+                                    <div class="card-footer">
+                                        <div class="form-check d-flex gap-2 align-items-center justify-content-between">
+                                            <input class="form-check-input asset-checkbox" type="checkbox" id="m-category1" />
+                                            <button type="button" class="custombtn download-single" data-file="{{ asset('storage/') }}/${asset.file}">Download <i class="ri-download-line align-middle ms-2"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    $('#asset-list').html(assetsHtml);
+                    $('#pagination').html(response.pagination);
+                },
+                error: function(xhr) {
+                    console.error("AJAX Error:", xhr.responseText);
+                    $('#asset-list').html('<p class="text-center text-danger">Failed to load assets.</p>');
+                }
+            });
+        }
+
+        // $('.filter-option').change(fetchAssets);
+        $(document).on('change', '.filter-option, #language, #country', function() {
+            fetchAssets();
+        });
+           // Single File Download
+        $(document).on('click', '.download-single', function() {
+            let fileUrl = $(this).data('file');
+            let link = document.createElement('a');
+            link.href = fileUrl;
+            link.download = fileUrl.split('/').pop();
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+
+        // Bulk Download
+        $('#bulk-download-btn').on('click', function() {
+            let selectedAssets = [];
+            $('.asset-checkbox:checked').each(function() {
+                selectedAssets.push($(this).val());
+            });
+
+            if (selectedAssets.length === 0) {
+                alert('Please select at least one asset to download.');
+                return;
+            }
+
+            $.ajax({
+                url: "{{ route('bulk.download.asset') }}",
+                method: "POST",
+                data: { asset_ids: selectedAssets, _token: "{{ csrf_token() }}" },
+                success: function(response) {
+                    let link = document.createElement('a');
+                    link.href = response.zip_url;
+                    link.download = 'assets.zip';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                },
+                error: function(xhr) {
+                    console.error("Bulk Download Error:", xhr.responseText);
+                    alert("Failed to generate bulk download.");
+                }
+            });
+        });
+        // $('#language, #country').change(fetchAssets);
+
+        $(document).on('click', '.pagination a', function(e) {
+            e.preventDefault();
+            let page = $(this).attr('href').split('page=')[1];
+            fetchAssets(page);
+        });
+        fetchAssets();
+    });
+</script>
 @endsection

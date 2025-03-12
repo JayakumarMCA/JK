@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use App\Models\Country;
+use App\Models\Language;
 use Illuminate\Http\Request;
 use Str;
 use Storage;
@@ -17,7 +18,7 @@ class EventController extends Controller
     }
     public function index()
     {
-        $events = Event::with('country')->get();
+        $events = Event::with('country','language')->get();
         return view('admin.events.index', compact('events'));
     }
 
@@ -25,7 +26,8 @@ class EventController extends Controller
     public function create()
     {
         $countries = Country::all();
-        return view('admin.events.create', compact('countries'));
+        $languages = Language::all();
+        return view('admin.events.create', compact('countries','languages'));
     }
 
     // Store a new event
@@ -37,7 +39,9 @@ class EventController extends Controller
             'date' => 'required|date',
             'time' => 'required',
             'location' => 'required|string',
+            'link' => 'required|string',
             'country_id' => 'required|exists:countries,id',
+            'language_id' => 'required|exists:languages,id',
             'status' => 'nullable|integer|in:0,1',
         ]);
         $data = $request->all();
@@ -56,7 +60,8 @@ class EventController extends Controller
     public function edit(Event $event)
     {
         $countries = Country::all();
-        return view('admin.events.edit', compact('event', 'countries'));
+        $languages = Language::all();
+        return view('admin.events.edit', compact('event', 'countries','languages'));
     }
 
     // Update event
@@ -70,8 +75,10 @@ class EventController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'date' => 'required|date',
             'time' => 'required',
+            'link' => 'required|string',
             'location' => 'required|string',
             'country_id' => 'required|exists:countries,id',
+            'language_id' => 'required|exists:languages,id',
             'status' => 'required|integer|in:0,1',
         ]);
 

@@ -32,6 +32,7 @@
                                             <th data-priority="1">Time</th>
                                             <th data-priority="1">Location</th>
                                             <th data-priority="1">Country</th>
+                                            <th data-priority="1">Language</th>
                                             <th data-priority="1">Status</th>
                                             <th data-priority="1">Actions</th>
                                         </tr>
@@ -53,6 +54,7 @@
                                                 <td>{{ $event->time }}</td>
                                                 <td>{{ $event->location }}</td>
                                                 <td>{{ $event->country->name }}</td>
+                                                <td>{{ $event->language->name }}</td>
                                                 <td>{{ $event->status ? 'Active' : 'Inactive' }}</td>
                                                 <td>
                                                     @can('event-edit')

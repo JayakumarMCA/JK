@@ -22,27 +22,26 @@
                                         <i class="ri-calendar-event-line me-1"></i> Events
                                     </a>
                                 </li>
-
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">
-                                        <i class="ri-bar-chart-2-line me-1"></i> Support Form
-                                    </a>
-                                </li>
-                                
+                                @can('enquiry-create')
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{route('enquiries.create')}}">
+                                            <i class="ri-bar-chart-2-line me-1"></i> Support Form
+                                        </a>
+                                    </li>
+                                @endcan
 
                                 <li class="nav-item">
                                     <a class="nav-link" href="#">
                                         <i class="ri-question-line me-0"></i> How to use
                                     </a>
                                 </li>
-
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-apps" role="button"
-                                    >
-                                        <i class="ri-mastercard-line me-1"></i>Masters <div class="arrow-down"></div>
-                                    </a>
-                                    <div class="dropdown-menu" aria-labelledby="topnav-apps">
-                                        @canAny(['user-list','asset-list','event-list','campaign-list'])
+                                @canAny(['user-list','asset-list','event-list','campaign-list'])
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-apps" role="button"
+                                        >
+                                            <i class="ri-mastercard-line me-1"></i>Masters <div class="arrow-down"></div>
+                                        </a>
+                                        <div class="dropdown-menu" aria-labelledby="topnav-apps">
                                             @can('user-list')
                                                 <a href="{{route('users.index')}}" class="dropdown-item">Users</a>
                                             @endcan
@@ -53,12 +52,14 @@
                                                 <a href="{{route('events.index')}}" class="dropdown-item">Event</a>
                                             @endcan
                                             @can('campaign-list')
-                                                <a href="#" class="dropdown-item">Campaign</a>
+                                                <a href="{{route('campaigns.index')}}" class="dropdown-item">Campaign</a>
                                             @endcan
-                                            <a href="#" class="dropdown-item">Support Enquiry</a>
-                                        @endcan
-                                    </div>
-                                </li>
+                                            @can('enquiry-list')
+                                                <a href="{{route('enquiries.index')}}" class="dropdown-item">Support Enquiry</a>
+                                            @endcan
+                                        </div>
+                                    </li>
+                                @endcan
 
                                 
 

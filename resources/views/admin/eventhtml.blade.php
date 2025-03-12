@@ -115,8 +115,10 @@
                 <!-- end page title -->
 
                 <div class="row mb-4">
-                    <div class="card-group gap-4">
+                    <div class="row">
+
                         <!-- 01 -->
+                        <div class="col-12 col-md-3 col-lg-3">
                         <div class="card">
                             <img class="w-100" src="{{ asset ('assets/images/events/01.png')}}" />
                             <div class="card-body">
@@ -141,7 +143,97 @@
                                 </div>
                             </div>
                         </div>
+                        </div>
                         <!-- 01 -->
+
+                        <!-- 01 -->
+                        <div class="col-12 col-md-3 col-lg-3">
+                        <div class="card">
+                            <img class="w-100" src="{{ asset ('assets/images/events/01.png')}}" />
+                            <div class="card-body">
+                                <h5 class="card-title">Advanced Solutions Services</h5>
+                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                            </div>
+                            <div class="px-3 py-1">
+                                <div class="d-flex gap-1 justify-content-between px-1">
+                                    <div>
+                                        <div><i class="ri-calendar-2-line align-middle tealcolor"></i> May 31, 2023</div>
+                                        <div class="mt-1"><i class="ri-timer-line align-middle tealcolor"></i> 1:00 PM</div>
+                                    </div>
+                                    <div>
+                                        <div><i class="ri-earth-line align-middle tealcolor"></i> India</div>
+                                        <div class="mt-1"><i class="ri-mic-fill align-middle tealcolor"></i> English</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <button type="button" class="custombtn">Know More <i class="ri-arrow-right-line align-middle ms-2"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                        <!-- 01 -->
+
+
+                        <!-- 01 -->
+                        <div class="col-12 col-md-3 col-lg-3">
+                        <div class="card">
+                            <img class="w-100" src="{{ asset ('assets/images/events/01.png')}}" />
+                            <div class="card-body">
+                                <h5 class="card-title">Advanced Solutions Services</h5>
+                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                            </div>
+                            <div class="px-3 py-1">
+                                <div class="d-flex gap-1 justify-content-between px-1">
+                                    <div>
+                                        <div><i class="ri-calendar-2-line align-middle tealcolor"></i> May 31, 2023</div>
+                                        <div class="mt-1"><i class="ri-timer-line align-middle tealcolor"></i> 1:00 PM</div>
+                                    </div>
+                                    <div>
+                                        <div><i class="ri-earth-line align-middle tealcolor"></i> India</div>
+                                        <div class="mt-1"><i class="ri-mic-fill align-middle tealcolor"></i> English</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <button type="button" class="custombtn">Know More <i class="ri-arrow-right-line align-middle ms-2"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                        <!-- 01 -->
+
+                        <!-- 01 -->
+                        <div class="col-12 col-md-3 col-lg-3">
+                        <div class="card">
+                            <img class="w-100" src="{{ asset ('assets/images/events/01.png')}}" />
+                            <div class="card-body">
+                                <h5 class="card-title">Advanced Solutions Services</h5>
+                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                            </div>
+                            <div class="px-3 py-1">
+                                <div class="d-flex gap-1 justify-content-between px-1">
+                                    <div>
+                                        <div><i class="ri-calendar-2-line align-middle tealcolor"></i> May 31, 2023</div>
+                                        <div class="mt-1"><i class="ri-timer-line align-middle tealcolor"></i> 1:00 PM</div>
+                                    </div>
+                                    <div>
+                                        <div><i class="ri-earth-line align-middle tealcolor"></i> India</div>
+                                        <div class="mt-1"><i class="ri-mic-fill align-middle tealcolor"></i> English</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <button type="button" class="custombtn">Know More <i class="ri-arrow-right-line align-middle ms-2"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                        <!-- 01 -->
+
 
                         <!-- 01 -->
                         <div class="card">
