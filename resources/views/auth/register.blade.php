@@ -7,7 +7,7 @@
 @section('content')
 <body class="auth-body-bg loginbg">
     <div class="accountbg"></div>
-    <div class="wrapper-page" style="width: 40%;">
+    <div class="wrapper-page login-wrapper">
         <div class="card">
             <div class="card-body">
                 <h3 class="text-center mt-0 mb-2">

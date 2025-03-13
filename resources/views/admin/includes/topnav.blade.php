@@ -4,15 +4,16 @@
     
                         <div class="collapse navbar-collapse" id="topnav-menu-content">
                             <ul class="navbar-nav">
-
-                                <li class="nav-item">
-                                    <a class="nav-link" href="/dashboard">
-                                        <i class="ri-dashboard-line me-1"></i> Dashboard
-                                    </a>
-                                </li>
+                                @can('dashboard-view')
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/admin/dashboard">
+                                            <i class="ri-dashboard-line me-1"></i> Dashboard
+                                        </a>
+                                    </li>
+                                @endcan
     
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/page">
+                                    <a class="nav-link" href="/get-assets">
                                         <i class="ri-airplay-fill me-1"></i> Assets
                                     </a>
                                 </li>

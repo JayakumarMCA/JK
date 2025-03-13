@@ -1,15 +1,13 @@
 @extends('admin.layouts.master')
-
 @php
     $page_title = 'Techdata || Asset';
     $page_name = 'Techdata || Asset';
 @endphp
-
 @section('content')
 <div class="page-content mainpage-content">
     <img class="img-fluid w-100" style="margin-top: 10px;" src="{{ asset('assets/images/techbanner.png')}}" />
 
-    <div class="container-fluid mt-5">
+    <div class="container-fluid mt-5 maincontpad">
         <div class="row">
             <!-- Filter Bar -->
             <div class="col-12 col-lg-3">
@@ -31,7 +29,6 @@
                                 </div>
                             @endforeach
                         </div>
-
                         <!-- Product Filter -->
                         <div class="mb-2 filterborder pb-4">
                             <label class="fw-bold">Product</label>
@@ -112,7 +109,7 @@
                             <div class="page-title-right">
                                 <div class="d-flex gap-3">
                                     <button class="topcustombtn btn btn-primary waves-effect waves-light" id="bulk-download-btn">Download <i class="ri-download-line align-middle ms-1"></i></button>
-                                    <button class="topcustombtn btn btn-primary waves-effect waves-light">Email <i class="ri-mail-line align-middle ms-1"></i></button>
+                                    <button class="topcustombtn btn btn-primary waves-effect waves-light" id="send-email-btn">Email <i class="ri-mail-line align-middle ms-1"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -133,7 +130,6 @@
     </div>
 </div>
 @endsection
-
 @section('js')
 <script>
     $(document).ready(function() {
@@ -143,18 +139,14 @@
                 product: [],
                 asset_type: [],
                 utilization: [],
-                language: $('#language').val() || "", 
+                language: $('#language').val() || "",
                 country: $('#country').val() || "",
                 page: page,
             };
-
-            // Collect selected filters
             $('.filter-option:checked').each(function() {
                 let filterName = $(this).data('filter');
                 filters[filterName].push($(this).val());
             });
-
-            // Send AJAX request
             $.ajax({
                 url: "{{ route('fetch.asset') }}",
                 method: "GET",
@@ -181,8 +173,8 @@
                                     </div>
                                     <div class="card-footer">
                                         <div class="form-check d-flex gap-2 align-items-center justify-content-between">
-                                            <input class="form-check-input asset-checkbox" type="checkbox" id="m-category1" />
-                                            <button type="button" class="custombtn download-single" data-file="{{ asset('storage/') }}/${asset.file}">Download <i class="ri-download-line align-middle ms-2"></i></button>
+                                            <input class="form-check-input asset-checkbox" type="checkbox" value="${asset.id}" />
+                                            <button type="button" class="custombtn download-single" data-file="{{ asset('storage/') }}/${asset.file}" data-id="${asset.id}">Download <i class="ri-download-line align-middle ms-2"></i></button>
                                         </div>
                                     </div>
                                 </div>
@@ -199,41 +191,54 @@
                 }
             });
         }
-
-        // $('.filter-option').change(fetchAssets);
         $(document).on('change', '.filter-option, #language, #country', function() {
             fetchAssets();
         });
-           // Single File Download
         $(document).on('click', '.download-single', function() {
+            let asset_id = $(this).data('id'); 
             let fileUrl = $(this).data('file');
-            let link = document.createElement('a');
-            link.href = fileUrl;
-            link.download = fileUrl.split('/').pop();
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            $.ajax({
+                url: "{{ route('fetch.downloadasset') }}",
+                method: "POST",
+                data: { asset_id: asset_id, _token: "{{ csrf_token() }}" },
+                xhrFields: {
+                    responseType: 'blob'
+                },
+                success: function(response) {
+                    let blob = new Blob([response], { type: response.type });
+                    let link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = fileUrl.split('/').pop();
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                },
+                error: function(xhr) {
+                    console.error("Single Download Error:", xhr.responseText);
+                    alert("Failed to download the file.");
+                }
+            });
         });
-
-        // Bulk Download
         $('#bulk-download-btn').on('click', function() {
             let selectedAssets = [];
             $('.asset-checkbox:checked').each(function() {
                 selectedAssets.push($(this).val());
             });
-
             if (selectedAssets.length === 0) {
                 alert('Please select at least one asset to download.');
                 return;
             }
-
             $.ajax({
                 url: "{{ route('bulk.download.asset') }}",
                 method: "POST",
                 data: { asset_ids: selectedAssets, _token: "{{ csrf_token() }}" },
+                xhrFields: {
+                    responseType: 'blob'
+                },
                 success: function(response) {
+                    let blob = new Blob([response], { type: 'application/zip' });
                     let link = document.createElement('a');
-                    link.href = response.zip_url;
+                    link.href = window.URL.createObjectURL(blob);
                     link.download = 'assets.zip';
                     document.body.appendChild(link);
                     link.click();
@@ -245,14 +250,46 @@
                 }
             });
         });
-        // $('#language, #country').change(fetchAssets);
-
         $(document).on('click', '.pagination a', function(e) {
             e.preventDefault();
             let page = $(this).attr('href').split('page=')[1];
             fetchAssets(page);
         });
         fetchAssets();
+        $('#send-email-btn').on('click', function() {
+            let selectedAssets = [];
+            $('.asset-checkbox:checked').each(function() {
+                selectedAssets.push($(this).val());
+            });
+
+            if (selectedAssets.length === 0) {
+                alert('Please select at least one asset to send via email.');
+                return;
+            }
+
+            let userEmail = prompt('Enter recipient email:');
+            if (!userEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userEmail)) {
+                alert('Please enter a valid email address.');
+                return;
+            }
+
+            $.ajax({
+                url: "{{ route('send.asset.email') }}",
+                method: "POST",
+                data: {
+                    asset_ids: selectedAssets,
+                    email: userEmail,
+                    _token: "{{ csrf_token() }}"
+                },
+                success: function(response) {
+                    alert("Email sent successfully with attachments");
+                },
+                error: function(xhr) {
+                    console.error("Email Error:", xhr.responseText);
+                    alert("Failed to send email.");
+                }
+            });
+        });
     });
 </script>
 @endsection

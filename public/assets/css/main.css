@@ -52,7 +52,7 @@ body[data-layout=horizontal][data-topbar=light] .topnav
 }
 .ratinglabel
 {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 400;
 }
 .filterborder{
@@ -107,7 +107,14 @@ body[data-layout=horizontal][data-topbar=light] .topnav
 {
   color: rgba(255,255,255,.9) !important;
 }
-
+.login-wrapper
+{
+  width: 40% !important;
+}
+.maincontpad
+{
+  padding: 10px 20px !important;
+}
 
 /* Hide filters in mobile, only show in offcanvas */
 @media (max-width: 768px) {
@@ -140,6 +147,14 @@ body[data-layout=horizontal][data-topbar=light] .topnav
     .topnav .navbar-nav .nav-link
     {
       color: #4d4d4d !important;
+    }
+    .login-wrapper
+    {
+      width: 100%;
+    }
+    .maincontpad
+    {
+      padding: 10px 30px !important;
     }
 }
 

@@ -10,8 +10,18 @@ use App\Models\AssetType;
 use App\Models\AssetUtilization;
 use App\Models\Asset;
 use App\Models\Industry;
+use App\Models\UsageLog;
+use App\Mail\AssetEmail;
+use App\Models\User;
+use Illuminate\Support\Facades\Mail;
 
-use ZipArchive;
+use Auth;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+use ZipStream\ZipStream;
+use ZipStream\OperationMode;
+use Illuminate\Support\Facades\Storage;
+
+// use ZipArchive;
 
 class HomeController extends Controller
 {
@@ -210,65 +220,110 @@ class HomeController extends Controller
         $countries = Country::all();
         return view('admin.page',compact('assets','industries','products','assetTypes','utilizations','languages','countries'));
     }
-    public function fetchDownload(Request $request)
-    {
-        $query = Asset::query();
-
-        if ($request->industry) {
-            $query->whereIn('industry_id', $request->industry);
-        }
-        if ($request->product) {
-            $query->whereIn('product_id', $request->product);
-        }
-        if ($request->asset_type) {
-            $query->whereIn('asset_type_id', $request->asset_type);
-        }
-        if ($request->utilization) {
-            $query->whereIn('utilization_id', $request->utilization);
-        }
-        if ($request->language) {
-            $query->where('language_id', $request->language);
-        }
-        if ($request->country) {
-            $query->where('country_id', $request->country);
-        }
-
-        $assets = $query->paginate(12);
-        
-        return response()->json([
-            'data' => $assets->items(),
-            'pagination' => $assets->links()->toHtml()
-        ]);
-    }
+    
     public function bulkDownload(Request $request)
     {
         $assetIds = $request->asset_ids;
         if (!$assetIds || count($assetIds) === 0) {
             return response()->json(['error' => 'No assets selected'], 400);
         }
-    
-        $zipFileName = 'assets.zip';
-        $zipPath = storage_path("app/public/$zipFileName");
-    
         $assets = Asset::whereIn('id', $assetIds)->get();
-        $filePaths = [];
-    
-        foreach ($assets as $asset) {
-            $filePath = storage_path("app/public/{$asset->file}");
-            if (file_exists($filePath)) {
-                $filePaths[] = escapeshellarg($filePath);
-            }
-        }
-    
-        if (empty($filePaths)) {
+        if ($assets->isEmpty()) {
             return response()->json(['error' => 'No valid files found'], 400);
         }
-    
-        // Run zip command ( `-j` removes directory structure)
-        $cmd = 'zip -j ' . escapeshellarg($zipPath) . ' ' . implode(' ', $filePaths);
-        shell_exec($cmd);
-    
-        return response()->json(['zip_url' => asset("storage/$zipFileName")]);
+        $response = new StreamedResponse(function () use ($assets) {
+            $zip = new ZipStream(outputName: 'assets.zip', operationMode: OperationMode::NORMAL);
+            foreach ($assets as $asset) {
+                UsageLog::create([
+                    'user_id'=>Auth::user()->id,
+                    'type'=>1,
+                    'type_id'=>$asset->id,
+                    'download_type'=>"download",
+                ]);
+                $filePath = storage_path("app/public/{$asset->file}");
+                if (file_exists($filePath)) {
+                    $zip->addFileFromPath(basename($filePath), $filePath);
+                }
+            }
+            $zip->finish();
+        });
+        $response->headers->set('Content-Type', 'application/octet-stream');
+        $response->headers->set('Content-Disposition', 'attachment; filename="assets.zip"');
+        return $response;
+    }
+    public function fetchDownloadAsset(Request $request)
+    {
+        $asset_id = $request->asset_id;
+        $asset = Asset::find($asset_id);
+
+        if (!$asset) {
+            return response()->json(['error' => 'Asset not found'], 404);
+        }
+        UsageLog::create([
+            'user_id'=>Auth::user()->id,
+            'type'=>1,
+            'type_id'=>$asset->id,
+            'download_type'=>"download",
+        ]);
+        $filePath = storage_path("app/public/{$asset->file}");
+
+        if (!file_exists($filePath)) {
+            return response()->json(['error' => 'File not found'], 404);
+        }
+
+        return response()->file($filePath, [
+            'Content-Type' => mime_content_type($filePath),
+            'Content-Disposition' => 'attachment; filename="' . basename($filePath) . '"',
+        ]);
+    }
+    public function storeEventLog(Request $request)
+    {
+        $log = UsageLog::create([
+            'user_id' => $request->user_id,
+            'type' => 2,
+            'type_id' => $request->type_id,
+            'download_type'=>"click",
+        ]);
+
+        return response()->json(['message' => 'Usage log saved', 'data' => $log]);
+    }
+    public function sendAssetEmail(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'asset_ids' => 'required|array|min:1|max:10', // Limit the number of assets to 10
+            'asset_ids.*' => 'required|exists:assets,id',
+        ]);
+        $filePaths = Asset::whereIn('id', $request->asset_ids)
+            ->pluck('file')
+            ->map(function ($file) {
+                return storage_path('app/public/' . $file); // Use 'public/' for public disk
+            })
+            ->filter(function ($filePath) {
+                return file_exists($filePath); // Ensure the file exists
+            })
+            ->toArray();
+        if (empty($filePaths)) {
+            return response()->json(['message' => 'No valid files found for attachment'], 400);
+        }
+
+        try {
+            Mail::to($request->email)->send(new AssetEmail($filePaths));
+
+            return response()->json(['message' => 'Email sent successfully with attachments']);
+        } catch (\Exception $e) {
+            \Log::error('Failed to send email: ' . $e->getMessage());
+
+            return response()->json(['message' => 'Failed to send email. Please try again later.'], 500);
+        }
+    }
+
+    public function getDashboard(Request $request)
+    {
+        $getUser     =   User::count();
+        $getAsset    =   Asset::count();
+        $getEvent    =   Event::count();
+        return view('admin.dashboard',compact('getUser','getAsset','getEvent'));
     }
 }
 

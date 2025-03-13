@@ -21,7 +21,7 @@
                             <label class="fw-bold">Language</label>
                             @foreach($languages as $id => $language)
                                 <div class="form-check d-flex gap-2 align-items-center mt-2">
-                                    <input class="form-check-input filter-option" type="checkbox" data-filter="languages" value="{{ $language }}" />
+                                    <input class="form-check-input filter-option" type="checkbox" data-filter="languages" value="{{ $id }}" />
                                     <label class="form-check-label ratinglabel">{{ $language }}</label>
                                 </div>
                             @endforeach
@@ -30,7 +30,7 @@
                             <label class="fw-bold">Country</label>
                             @foreach($countries as $id => $country)
                                 <div class="form-check d-flex gap-2 align-items-center mt-2">
-                                    <input class="form-check-input filter-option" type="checkbox" data-filter="countries" value="{{ $country }}" />
+                                    <input class="form-check-input filter-option" type="checkbox" data-filter="countries" value="{{ $id }}" />
                                     <label class="form-check-label ratinglabel">{{ $country }}</label>
                                 </div>
                             @endforeach
@@ -57,7 +57,7 @@
                 <div class="row mt-lg-0 mt-4">
                     <div class="col-12">
                         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                            <h3 class="mb-sm-0 d-flex align-items-center gap-2">Events - <small>{{ $events->firstItem() ?? '0' }}-{{ $events->lastItem() }} ({{ $events->total() }})</small></h3>
+                            <h3 class="mb-sm-0 d-flex align-items-center gap-2">Events - <small id="event-count">{{ $events->firstItem() ?? '0' }}-{{ $events->lastItem() }} ({{ $events->total() }})</small></h3>
 
                             <!-- App Search-->
                             <!-- <form class="app-search d-none d-lg-block w-50">
@@ -84,14 +84,14 @@
                 </div>
                 <!-- end page title -->
 
-                <div class="row mb-4">
-                    <div class="card-group gap-4">
+                <!-- <div class="row mb-4"> -->
+                    <div class="row" id="event-list">
                         <!-- 01 -->
-                        <div id="event-list">
+                        <!-- <div id="event-list"> -->
                             @foreach($events as $event)
-                                <div class="event-card">
+                                <div class="col-12 col-md-3 col-lg-3">
                                     <div class="card">
-                                        <img src="{{ asset('storage/' . $event->image) }}" class="w-100">
+                                        <img src="{{ asset('storage/' . $event->image) }}" class="w-10 h-10">
                                         <div class="card-body">
                                             <h5 class="card-title">{{ $event->title ?? '' }}</h5>
                                             <p>{{ $event->location ?? '' }}</p>
@@ -110,15 +110,15 @@
                                         </div>
                                         <div class="card-footer">
                                             <div class="d-flex align-items-center justify-content-center">
-                                                <button type="button" class="custombtn">Know More <i class="ri-arrow-right-line align-middle ms-2"></i></button>
+                                            <a href="{{$event->link ?? ''}}"><button type="button" class="custombtn">Know More <i class="ri-arrow-right-line align-middle ms-2"></i></button></a>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             @endforeach
-                        </div>
+                        <!-- </div> -->
                     </div>
-                </div>
+                <!-- </div> -->
 
                 <!-- end row -->
             </div>
@@ -128,57 +128,126 @@
 @endsection
 @section('js')
 <script>
-    $(document).ready(function() {
-        function fetchEvents(page = 1) {
-            let filters = {
-                languages: [],
-                countries: [],
-                products: [],
-                assetTypes: [],
-                assetUtilizations: [],
-                sort_by: $('#sort_by').val(),
-                page: page, // Ensure pagination works dynamically
-            };
-    
-            $('.filter-option:checked').each(function() {
-                let filterName = $(this).data('filter');
-                filters[filterName].push($(this).val());
-            });
-    
-            $.ajax({
-                url: "{{ route('fetch.events') }}",
-                method: "GET",
-                data: filters,
-                success: function(response) {
-                    $('#event-list').html('');
-    
-                    $.each(response.data, function(index, event) {
-                        $('#event-list').append(`
-                            <div class="event-card">
-                                <h5>${event.name}</h5>
-                                <p>${event.date}</p>
-                            </div>
-                        `);
-                    });
-    
-                    // Update the event count dynamically
-                    $('#event-count').text(`${response.from}-${response.to} (${response.total})`);
-    
-                    // Update pagination
-                    $('.pagination-container').html(response.pagination);
-                }
-            });
-        }
-    
-        // Pagination event listener
-        $(document).on('click', '.pagination a', function(e) {
-            e.preventDefault();
-            let page = $(this).attr('href').split('page=')[1];
-            fetchEvents(page);
+   $(document).ready(function() {
+    function fetchEvents(page = 1) {
+        let filters = {
+            sort_by: $('#sort_by').val(),
+            page: page,
+            languages: [],
+            countries: []
+        };
+
+        // Collect selected filters
+        $('.filter-option:checked').each(function() {
+            let filterName = $(this).data('filter');
+            filters[filterName].push($(this).val());
         });
-        // Filter & sort change events
-        $('.filter-option').change(fetchEvents);
-        $('#sort_by').change(fetchEvents);
+
+        // Manually build the query string
+        let queryParams = [];
+        queryParams.push(`sort_by=${encodeURIComponent(filters.sort_by)}`);
+        queryParams.push(`page=${encodeURIComponent(filters.page)}`);
+        if (filters.languages.length > 0) {
+            queryParams.push(`languages=${encodeURIComponent(JSON.stringify(filters.languages))}`);
+        }
+        if (filters.countries.length > 0) {
+            queryParams.push(`countries=${encodeURIComponent(JSON.stringify(filters.countries))}`);
+        }
+
+        let queryString = queryParams.join('&');
+
+        console.log("queryString", queryString);
+
+        $.ajax({
+            url: "{{ route('fetch.events') }}",
+            method: "GET",
+            data: queryString,
+            beforeSend: function() {
+                $('#event-list').html('<p class="text-center">Loading events...</p>');
+            },
+            success: function(response) {
+                if (!response.data || response.data.length === 0) {
+                    $('#event-list').html('<p class="text-center">No events found.</p>');
+                    $('#event-count').text('0-0 (0)');
+                    $('.pagination-container').html('');
+                    return;
+                }
+
+                let eventsHtml = '';
+                $.each(response.data, function(index, event) {
+                    eventsHtml += `
+                        <div class="col-12 col-md-3 col-lg-3">
+                            <div class="card">
+                                <img src="{{ asset('storage/') }}/${event.image}" class="eventimg">
+                                <div class="card-body">
+                                    <h5 class="card-title">${event.title}</h5>
+                                    <p>${event.location}</p>
+                                </div>
+                                <div class="px-3 py-1">
+                                    <div class="d-flex gap-1 justify-content-between px-1">
+                                        <div>
+                                            <div><i class="ri-calendar-2-line align-middle tealcolor"></i> ${event.date}</div>
+                                            <div class="mt-1"><i class="ri-timer-line align-middle tealcolor"></i> ${event.time}</div>
+                                        </div>
+                                        <div>
+                                            <div><i class="ri-earth-line align-middle tealcolor"></i> ${event.country?.name ?? ''}</div>
+                                            <div class="mt-1"><i class="ri-mic-fill align-middle tealcolor"></i> ${event.language?.name ?? ''}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <a href="${event.link ?? ''}" class="track-click" data-event-id="${event.id ?? ''}" data-user-id="{{ auth()->id() }}"><button type="button" class="custombtn">Know More <i class="ri-arrow-right-line align-middle ms-2"></i></button></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                $('#event-list').html(eventsHtml);
+                $('#event-count').text(`${response.from}-${response.to} (${response.total})`);
+                $('.pagination-container').html(response.pagination);
+            },
+            error: function(xhr) {
+                console.error("AJAX Error:", xhr.responseText);
+                $('#event-list').html('<p class="text-center text-danger">Failed to load events.</p>');
+            }
+        });
+    }
+    // Event listeners
+    $('.filter-option').change(fetchEvents);
+    $('#sort_by').change(fetchEvents);
+    $(document).on('click', '.pagination a', function(e) {
+        e.preventDefault();
+        let url = $(this).attr('href');
+        let page = new URL(url).searchParams.get('page');
+        fetchEvents(page);
     });
-    </script>
+    // Initial fetch
+    fetchEvents();
+    
+});
+$(document).on('click', '.track-click', function(e) {
+    let eventId = $(this).data('event-id');
+    let userId = $(this).data('user-id') || null; // Handle guests
+    $.ajax({
+        url: "{{ route('usage.log') }}",
+        type: "POST",
+        data: {
+            _token: "{{ csrf_token() }}",
+            user_id: userId,
+            type: "event",
+            type_id: eventId,
+            click: "yes"
+        },
+        success: function(response) {
+            console.log("Usage log saved:", response);
+        },
+        error: function(xhr) {
+            console.error("Error logging usage:", xhr.responseText);
+        }
+    });
+});
+</script>
 @endsection

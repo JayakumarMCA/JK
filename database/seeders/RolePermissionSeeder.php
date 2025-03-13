@@ -37,6 +37,10 @@ class RolePermissionSeeder extends Seeder
             'asset-create',
             'asset-edit',
             'asset-delete',
+            'enquiry-list',
+            'enquiry-edit',
+            'enquiry-delete',
+            'dashboard-view',
             'campaign-list',
             'campaign-create',
             'campaign-edit',
@@ -72,6 +76,18 @@ class RolePermissionSeeder extends Seeder
             'campaign-edit',
         ];
         $superAdmin->syncPermissions($superAdminPermissions); // No delete permissions
+        $userpermissions = [
+            'enquiry-create',
+        ];
+
+        // Create Permissions
+        foreach ($userpermissions as $userpermission) {
+            Permission::firstOrCreate(['name' => $userpermission]);
+        }
+
+        // Assign Permissions to Roles
+        $user->syncPermissions($userpermissions); // Admin gets all permissions
+
 
     }
 }

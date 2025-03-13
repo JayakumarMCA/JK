@@ -17,35 +17,6 @@
                         <form action="{{ route('enquiries.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="row">
-                                <div class="col-md-4">
-                                    <div class="mb-3">
-                                        <label class="form-label">Name</label>
-                                        <input type="text" name="name" class="form-control" value="{{ old('name') }}" required>
-                                        @error('name')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="mb-3">
-                                        <label class="form-label">Email</label>
-                                        <input type="email" name="email" class="form-control" value="{{ old('email') }}" required>
-                                        @error('email')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <div class="mb-3">
-                                        <label class="form-label">Mobile</label>
-                                        <input type="text" name="mobile" class="form-control" value="{{ old('mobile') }}" required>
-                                        @error('mobile')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                </div>
-
                                 <div class="col-md-12">
                                     <div class="mb-3">
                                         <label class="form-label">Query</label>
@@ -57,7 +28,7 @@
                                 </div>
                             </div>
 
-                            <button class="btn btn-primary" type="submit">Create Enquiry</button>
+                            <button class="btn btn-primary" type="submit">Submit</button>
                         </form>
                     </div>
                 </div>

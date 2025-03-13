@@ -30,13 +30,17 @@ class EnquiryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email',
+            // 'name' => 'required|string|max:255',
+            // 'email' => 'required|email',
             'query' => 'required|string',
-            'mobile' => 'required|numeric|digits:10',
+            // 'mobile' => 'required|numeric|digits:10',
         ]);
         $inputs     =   $request->all();
+        $user       =   User::find(Auth::user()->id);
         $inputs['user_id']  =   Auth::user()->id;
+        $inputs['name']     =   $user->name;
+        $inputs['email']    =   $user->email;
+        $inputs['mobile']   =   $user->mobile;
         Enquiry::create($inputs);
 
         return redirect()->route('enquiries.create')->with('success', 'Enquiry created successfully.');

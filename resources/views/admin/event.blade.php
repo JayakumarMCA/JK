@@ -8,7 +8,7 @@
 <div class="page-content mainpage-content">
     <img class="img-fluid w-100" style="margin-top: 10px;" src="{{ asset ('assets/images/event-banner.png')}}" />
 
-    <div class="container-fluid mt-5">
+    <div class="container-fluid mt-5 maincontpad">
         <div class="row">
             <!-- Filter Bar -->
             <div class="col-12 col-lg-3">
@@ -197,7 +197,7 @@
                                 </div>
                                 <div class="card-footer">
                                     <div class="d-flex align-items-center justify-content-center">
-                                        <a href="${event.link ?? ''}"><button type="button" class="custombtn">Know More <i class="ri-arrow-right-line align-middle ms-2"></i></button></a>
+                                        <a href="${event.link ?? ''}" class="track-click" data-event-id="${event.id ?? ''}" data-user-id="{{ auth()->id() }}"><button type="button" class="custombtn">Know More <i class="ri-arrow-right-line align-middle ms-2"></i></button></a>
                                     </div>
                                 </div>
                             </div>
@@ -215,7 +215,6 @@
             }
         });
     }
-
     // Event listeners
     $('.filter-option').change(fetchEvents);
     $('#sort_by').change(fetchEvents);
@@ -225,10 +224,28 @@
         let page = new URL(url).searchParams.get('page');
         fetchEvents(page);
     });
-
     // Initial fetch
     fetchEvents();
+    
 });
-
+$(document).on('click', '.track-click', function(e) {
+    let eventId = $(this).data('event-id');
+    let userId = $(this).data('user-id') || null; // Handle guests
+    $.ajax({
+        url: "{{ route('usage.log') }}",
+        type: "POST",
+        data: {
+            _token: "{{ csrf_token() }}",
+            user_id: userId,
+            type_id: eventId,
+        },
+        success: function(response) {
+            console.log("Usage log saved:", response);
+        },
+        error: function(xhr) {
+            console.error("Error logging usage:", xhr.responseText);
+        }
+    });
+});
 </script>
 @endsection
