@@ -120,13 +120,6 @@ class HomeController extends Controller
     public function getFetchEvents(Request $request)
     {
         $query = Event::with('country', 'language');
-        // if ($request->filled('languages') && $request->languages!='') {
-        //     $query->whereIn('language_id', $request->languages);
-        // }
-
-        // if ($request->filled('countries') && $request->countries!='') {
-        //     $query->whereIn('country_id', $request->countries);
-        // }
         $languages = $request->filled('languages') ? (array) json_decode($request->languages, true) : [];
         $countries = $request->filled('countries') ? (array) json_decode($request->countries, true) : [];
 
@@ -136,6 +129,9 @@ class HomeController extends Controller
 
         if (!empty($countries)) {
             $query->whereIn('country_id', $countries);
+        }
+        if (!empty($request->search_query)) {
+            $query->where('title', 'like', '%' . $request->search_query . '%');
         }
 
         if ($request->filled('sort_by')) {
@@ -188,6 +184,9 @@ class HomeController extends Controller
         }
         if ($request->filled('country')) {
             $query->where('country_id', $request->country);
+        }
+        if (!empty($request->search_query)) {
+            $query->where('title', 'like', '%' . $request->search_query . '%');
         }
         if ($request->filled('sort_by')) {
             switch ($request->sort_by) {

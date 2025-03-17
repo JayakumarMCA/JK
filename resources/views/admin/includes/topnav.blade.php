@@ -36,7 +36,15 @@
                                         <i class="ri-question-line me-0"></i> How to use
                                     </a>
                                 </li>
+                                
                                 @canAny(['user-list','asset-list','event-list','campaign-list'])
+                                    @can('campaign-list')
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="{{route('campaigns.index')}}">
+                                                <i class="ri-camera-lens-line me-1"></i> Campaign
+                                            </a>
+                                        </li>
+                                    @endcan
                                     <li class="nav-item dropdown">
                                         <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-apps" role="button"
                                         >
@@ -52,9 +60,9 @@
                                             @can('event-list')
                                                 <a href="{{route('events.index')}}" class="dropdown-item">Event</a>
                                             @endcan
-                                            @can('campaign-list')
+                                            <!-- @can('campaign-list')
                                                 <a href="{{route('campaigns.index')}}" class="dropdown-item">Campaign</a>
-                                            @endcan
+                                            @endcan -->
                                             @can('enquiry-list')
                                                 <a href="{{route('enquiries.index')}}" class="dropdown-item">Support Enquiry</a>
                                             @endcan

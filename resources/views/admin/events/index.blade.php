@@ -10,6 +10,81 @@
             <div class="col-xl-12 col-12">
                 <div class="card">
                     <div class="card-body">
+                        <form class="custom-validation">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Title</label>
+                                        <input type="text" class="form-control" name="title" value="{{ $request->title }}" placeholder="Enter Title" />
+                                    </div>
+                                </div>
+                                <!-- Date -->
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Date</label>
+                                        <input type="date" class="form-control" name="date" value="{{ $request->date }}" >
+                                    </div>
+                                </div>
+
+                                <!-- Time -->
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Time</label>
+                                        <input type="time" class="form-control" name="time" value="{{ $request->time }}" >
+                                    </div>
+                                </div>
+
+                                <!-- Location -->
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Location</label>
+                                        <input type="text" class="form-control" name="location" value="{{ $request->location }}" placeholder="Enter Location" >
+                                    </div>
+                                </div>
+                                 <!-- Country -->
+                                 <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Country</label>
+                                        <select name="country_id" class="form-control" >
+                                            <option value="">Select Country</option>
+                                            @foreach($countries as $country)
+                                                <option value="{{ $country->id }}" {{$request->country_id == $country->id ? 'selected' : '' }}>
+                                                    {{ $country->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <!-- Language -->
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Language</label>
+                                        <select name="language_id" class="form-control" >
+                                            <option value="">Select Country</option>
+                                            @foreach($languages as $language)
+                                                <option value="{{ $language->id }}" {{ $request->language_id == $language->id ? 'selected' : '' }}>
+                                                    {{ $language->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <button class="btn btn-primary" type="submit" value="submit">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- end card -->
+
+
+            </div>
+        </div>     
+        <div class="row">
+            <div class="col-xl-12 col-12">
+                <div class="card">
+                    <div class="card-body">
                         <div class="row">
                             <div class="col-md-8">
                                 <h4 class="card-title">Events List</h4>

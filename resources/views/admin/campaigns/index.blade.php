@@ -10,6 +10,28 @@
             <div class="col-xl-12 col-12">
                 <div class="card">
                     <div class="card-body">
+                        <form class="custom-validation">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="mb-3">
+                                        <label class="form-label">Name</label>
+                                        <input type="text" class="form-control" name="name" value="{{ $request->name }}" placeholder="Enter Name" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <button class="btn btn-primary" type="submit" name="search" value="submit">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- end card -->
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-12 col-12">
+                <div class="card">
+                    <div class="card-body">
                         <div class="row">
                             <div class="col-md-8">
                                 <h4 class="card-title">Campaigns List</h4>
@@ -20,8 +42,8 @@
                                 </div>
                             @endcan
                         </div>
-                        <div class="table-rep-plugin mt-3">
-                            <div class="table-responsive mb-0" data-pattern="priority-columns">
+                        <!-- <div class="table-rep-plugin mt-3"> -->
+                            <!-- <div class="table-responsive mb-0" data-pattern="priority-columns"> -->
                                 <table id="tech-companies-1" class="table">
                                     <thead>
                                         <tr>
@@ -53,8 +75,8 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                            </div>
-                        </div>
+                            <!-- </div> -->
+                        <!-- </div> -->
                     </div>
                 </div>
             </div>

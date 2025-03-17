@@ -16,10 +16,40 @@ class EventController extends Controller
         $this->middleware('permission:event-edit', ['only' => ['edit', 'update']]);
         $this->middleware('permission:event-delete', ['only' => ['destroy']]);
     }
-    public function index()
+    public function index(Request $request)
     {
-        $events = Event::with('country','language')->get();
-        return view('admin.events.index', compact('events'));
+        $query      =   Event::with('country','language');
+        if (isset($request->search)) {
+            if ($request->title) {
+                $title = $request->title;
+                $title = trim($request->title, '"');
+                $query->where('events.title', 'like', '%' . $title . '%');
+            }
+            if ($request->date) {
+                $date = $request->date;
+                $query->where('events.date',$date);
+            }
+            if ($request->time) {
+                $time = $request->time;
+                $query->where('events.time',$time);
+            }
+            if ($request->location) {
+                $location = $request->location;
+                $query->where('events.location',$location);
+            }
+            if ($request->country_id) {
+                $country_id = $request->country_id;
+                $query->where('events.country_id',$country_id);
+            }
+            if ($request->language_id) {
+                $language_id = $request->language_id;
+                $query->where('events.language_id',$language_id);
+            }
+        }
+        $countries  =   Country::all();
+        $languages  =   Language::all();
+        $events     =   $query->get();
+        return view('admin.events.index', compact('events','request','countries','languages'));
     }
 
     // Show create event form

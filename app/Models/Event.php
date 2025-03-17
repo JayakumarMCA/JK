@@ -20,6 +20,6 @@ class Event extends Model
     }
     public function language()
     {
-        return $this->belongsTo(language::class);
+        return $this->belongsTo(Language::class);
     }
 }

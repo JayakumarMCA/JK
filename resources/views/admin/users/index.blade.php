@@ -10,12 +10,77 @@
             <div class="col-xl-12 col-12">
                 <div class="card">
                     <div class="card-body">
+                        <form class="custom-validation">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Name</label>
+                                        <input type="text" class="form-control"  name="name" value="{{ $request->name }}"  />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" class="form-control"  name="email" value="{{ $request->email }}"  />
+                                       
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Mobile</label>
+                                        <input type="text" class="form-control" name="mobile" value="{{ $request->mobile }}"  />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Organization</label>
+                                        <input type="text" class="form-control" name="organization" value="{{$request->organization }}"  />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Job Title</label>
+                                        <input type="text" class="form-control"  name="job_title" value="{{ $request->job_title }}"  />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">City</label>
+                                        <input type="text" class="form-control" name="city" value="{{ $request->city }}"  />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Country</label>
+                                        <select class="form-control" name="country_id" >
+                                            <option value="">Select Country</option>
+                                            @foreach ($countries as $country)
+                                                <option value="{{ $country->id }}" @if( $request->country_id == $country->id) selected @endif >
+                                                    {{ $country->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <button class="btn btn-primary" type="submit" name="search" value="submit">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-12 col-12">
+                <div class="card">
+                    <div class="card-body">
                         <div class="row">
                             <div class="col-md-8">
                                 <h4 class="card-title">Users</h4>
                             </div>
                             <div class="col-md-4 text-end">
-                                <a href="{{ route('users.create') }}" class="btn btn-primary text-end">Add Role</a>
+                                <a href="{{ route('users.create') }}" class="btn btn-primary text-end">Add User</a>
                             </div>
                         </div>
                         <!-- <h3 class="card-title fs-4">Users List</h3> -->
@@ -67,10 +132,7 @@
                             </div>
                         </div>
 
-                        <!-- Pagination -->
-                        <div class="d-flex justify-content-center">
-                            {{ $users->links() }}
-                        </div>
+                        
 
                     </div>
                 </div>

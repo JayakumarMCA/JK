@@ -21,10 +21,48 @@ class AssetController extends Controller
         $this->middleware('permission:asset-delete', ['only' => ['destroy']]);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $assets = Asset::with(['industry', 'product', 'assetType', 'utilization', 'language', 'country'])->get();
-        return view('admin.assets.index', compact('assets'));
+        $query          =   Asset::with(['industry', 'product', 'assetType', 'utilization', 'language', 'country']);
+        if (isset($request->search)) {
+            if ($request->title) {
+                $title = $request->title;
+                $title = trim($request->title, '"');
+                $query->where('assets.title', 'like', '%' . $title . '%');
+            }
+            if ($request->product_id) {
+                $product_id = $request->product_id;
+                $query->where('assets.product_id',$product_id);
+            }
+            if ($request->industry_id) {
+                $industry_id = $request->industry_id;
+                $query->where('assets.industry_id',$industry_id);
+            }
+            if ($request->asset_type_id) {
+                $asset_type_id = $request->asset_type_id;
+                $query->where('assets.asset_type_id',$asset_type_id);
+            }
+            if ($request->utilization_id) {
+                $utilization_id = $request->utilization_id;
+                $query->where('assets.utilization_id',$utilization_id);
+            }
+            if ($request->language_id) {
+                $language_id = $request->language_id;
+                $query->where('assets.language_id',$language_id);
+            }
+            if ($request->country_id) {
+                $country_id = $request->country_id;
+                $query->where('assets.country_id',$country_id);
+            }
+        }
+        $industries     =   Industry::all();
+        $products       =   Product::all();
+        $assetTypes     =   AssetType::all();
+        $utilizations   =   AssetUtilization::all();
+        $languages      =   Language::all();
+        $countries      =   Country::all();
+        $assets         =   $query->get();
+        return view('admin.assets.index', compact('request','assets','industries','products','assetTypes','utilizations','languages','countries'));
     }
 
     public function create()

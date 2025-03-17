@@ -16,10 +16,44 @@ class UserController extends Controller
         $this->middleware('permission:user-edit', ['only' => ['edit', 'update']]);
         $this->middleware('permission:user-delete', ['only' => ['destroy']]);
     }
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::with(['country', 'role'])->latest()->paginate(10);
-        return view('admin.users.index', compact('users'));
+        $query = User::with(['country', 'role']);
+        if (isset($request->search)) {
+            if ($request->name) {
+                $name = $request->name;
+                $name = trim($request->name, '"');
+                $query->where('users.name', 'like', '%' . $name . '%');
+            }
+            if ($request->email) {
+                $email = $request->email;
+                $query->where('users.email',$email);
+            }
+            if ($request->mobile) {
+                $mobile = $request->mobile;
+                $query->where('users.mobile',$mobile);
+            }
+            if ($request->organization) {
+                $organization = $request->organization;
+                $query->where('users.organization',$organization);
+            }
+            if ($request->job_title) {
+                $job_title = $request->job_title;
+                $query->where('users.job_title',$job_title);
+            }
+            if ($request->city) {
+                $city = $request->city;
+                $query->where('users.city',$city);
+            }
+            if ($request->country_id) {
+                $country_id = $request->country_id;
+                $query->where('users.country_id',$country_id);
+            }
+        }
+        $countries  =   Country::where('status',1)->get();
+        $roles      =   Role::all();
+        $users      =   $query->get();
+        return view('admin.users.index', compact('request','users','countries','roles'));
     }
     public function create()
     {

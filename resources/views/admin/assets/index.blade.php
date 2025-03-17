@@ -10,6 +10,112 @@
             <div class="col-xl-12 col-12">
                 <div class="card">
                     <div class="card-body">
+                        <form class="custom-validation">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Title</label>
+                                        <input type="text" class="form-control" name="title" value="{{ $request->title }}" placeholder="Enter Title" />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Industry</label>
+                                        <select class="form-control" name="industry_id" id="industry_select" >
+                                            <option value="">Select Industry</option>
+                                            @foreach ($industries as $industry)
+                                                <option value="{{ $industry->id }}" {{$request->industry_id == $industry->id ? 'selected' : '' }}>
+                                                    {{ $industry->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Product</label>
+                                        <select class="form-control" name="product_id" >
+                                            <option value="">Select Product</option>
+                                            @foreach ($products as $product)
+                                                <option value="{{ $product->id }}" {{$request->product_id == $product->id ? 'selected' : '' }}>
+                                                    {{ $product->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Asset Type</label>
+                                        <select class="form-control" id="asset_type_select" name="asset_type_id" >
+                                            <option value="">Select Asset Type</option>
+                                            @foreach ($assetTypes as $assetType)
+                                                <option value="{{ $assetType->id }}" data-types="{{ $assetType->type }}" {{ $request->asset_type_id == $assetType->id ? 'selected' : '' }}>
+                                                    {{ $assetType->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Utilization</label>
+                                        <select class="form-control @error('utilization_id') is-invalid @enderror" name="utilization_id" >
+                                            <option value="">Select Utilization</option>
+                                            @foreach ($utilizations as $utilization)
+                                                <option value="{{ $utilization->id }}" {{ $request->utilization_id == $utilization->id ? 'selected' : '' }}>
+                                                    {{ $utilization->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Language</label>
+                                        <select class="form-control" name="language_id" >
+                                            <option value="">Select Language</option>
+                                            @foreach ($languages as $language)
+                                                <option value="{{ $language->id }}" {{ $request->language_id == $language->id ? 'selected' : '' }}>
+                                                    {{ $language->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Country</label>
+                                        <select class="form-control" name="country_id" >
+                                            <option value="">Select Country</option>
+                                            @foreach ($countries as $country)
+                                                <option value="{{ $country->id }}" {{ $request->country_id == $country->id ? 'selected' : '' }}>
+                                                    {{ $country->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <button class="btn btn-primary" type="submit" name="search" value="submit">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- end card -->
+
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-12 col-12">
+                <div class="card">
+                    <div class="card-body">
                         <div class="row">
                             <div class="col-md-8">
                                 <h4 class="card-title">Assets List</h4>

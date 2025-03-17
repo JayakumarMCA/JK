@@ -4,8 +4,15 @@
     $page_title = 'Techdata || Event';
     $page_name = 'Techdata || Event';
 @endphp
+@section('css')
+<style>
+    .app-search .form-control {
+        border-radius: 0px !important;
+    }
+</style>
+@endsection
 @section('content')
-<div class="page-content mainpage-content">
+<div class="page-content mainpage-content mb-5">
     <img class="img-fluid w-100" style="margin-top: 10px;" src="{{ asset ('assets/images/event-banner.png')}}" />
 
     <div class="container-fluid mt-5 maincontpad">
@@ -17,7 +24,7 @@
                     <button class="topcustombtn btn btn-primary d-md-none waves-effect waves-light" data-bs-toggle="offcanvas" data-bs-target="#filterDrawer">Open Filters <i class="ri-filter-2-line align-middle ms-1"></i></button>
 
                     <div class="filters" id="filters">
-                        <div class="mb-2 filterborder pb-4">
+                        <div class="mb-2  pb-4">
                             <label class="fw-bold">Language</label>
                             @foreach($languages as $id => $language)
                                 <div class="form-check d-flex gap-2 align-items-center mt-2">
@@ -26,15 +33,15 @@
                                 </div>
                             @endforeach
                         </div>
-                        <div class="mb-2 pb-4">
-                            <label class="fw-bold">Country</label>
-                            @foreach($countries as $id => $country)
-                                <div class="form-check d-flex gap-2 align-items-center mt-2">
-                                    <input class="form-check-input filter-option" type="checkbox" data-filter="countries" value="{{ $id }}" />
-                                    <label class="form-check-label ratinglabel">{{ $country }}</label>
-                                </div>
-                            @endforeach
-                        </div>
+                        <!--<div class="mb-2 pb-4">-->
+                        <!--    <label class="fw-bold">Country</label>-->
+                        <!--    @foreach($countries as $id => $country)-->
+                        <!--        <div class="form-check d-flex gap-2 align-items-center mt-2">-->
+                        <!--            <input class="form-check-input filter-option" type="checkbox" data-filter="countries" value="{{ $id }}" />-->
+                        <!--            <label class="form-check-label ratinglabel">{{ $country }}</label>-->
+                        <!--        </div>-->
+                        <!--    @endforeach-->
+                        <!--</div>-->
                     </div>
                 </div>
 
@@ -60,12 +67,12 @@
                             <h3 class="mb-sm-0 d-flex align-items-center gap-2">Events - <small id="event-count">{{ $events->firstItem() ?? '0' }}-{{ $events->lastItem() }} ({{ $events->total() }})</small></h3>
 
                             <!-- App Search-->
-                            <!-- <form class="app-search d-none d-lg-block w-50">
-                                    <div class="position-relative">
-                                        <input type="text" class="form-control border" placeholder="Search...">
-                                        <span class="ri-search-line"></span>
-                                    </div>
-                                </form> -->
+                            <form class="app-search d-none d-lg-block w-50">
+                                <div class="position-relative">
+                                    <input type="text" id="search_event" class="form-control border" placeholder="Search...">
+                                    <span class="ri-search-line"></span>
+                                </div>
+                            </form>
 
                             <div class="page-title-right">
                                 <div class="d-flex gap-3 align-items-center">
@@ -134,7 +141,9 @@
             sort_by: $('#sort_by').val(),
             page: page,
             languages: [],
-            countries: []
+            countries: [],
+            search_query: $('#search_event').val().trim()
+
         };
 
         // Collect selected filters
@@ -152,6 +161,9 @@
         }
         if (filters.countries.length > 0) {
             queryParams.push(`countries=${encodeURIComponent(JSON.stringify(filters.countries))}`);
+        }
+        if (filters.search_query.length > 0) {
+            queryParams.push(`search_query=${encodeURIComponent(JSON.stringify(filters.search_query))}`);
         }
 
         let queryString = queryParams.join('&');
@@ -218,6 +230,9 @@
     // Event listeners
     $('.filter-option').change(fetchEvents);
     $('#sort_by').change(fetchEvents);
+    $('#search_event').on('input', function() {
+        fetchEvents(); // Fetch events on search input
+    });
     $(document).on('click', '.pagination a', function(e) {
         e.preventDefault();
         let url = $(this).attr('href');

@@ -3,8 +3,15 @@
     $page_title = 'Techdata || Asset';
     $page_name = 'Techdata || Asset';
 @endphp
+@section('css')
+<style>
+    .app-search .form-control {
+        border-radius: 0px !important;
+    }
+</style>
+@endsection
 @section('content')
-<div class="page-content mainpage-content">
+<div class="page-content mainpage-content mb-5">
     <img class="img-fluid w-100" style="margin-top: 10px;" src="{{ asset('assets/images/techbanner.png')}}" />
 
     <div class="container-fluid mt-5 maincontpad">
@@ -106,6 +113,13 @@
                         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
                             <h3 class="mb-sm-0">Exclusive Assets for Partners</h3>
 
+                            <form class="app-search d-none d-lg-block w-25">
+                                <div class="position-relative">
+                                    <input type="text" id="search_event" class="form-control border" placeholder="Search...">
+                                    <span class="ri-search-line"></span>
+                                </div>
+                            </form>
+                            
                             <div class="page-title-right">
                                 <div class="d-flex gap-3">
                                     <button class="topcustombtn btn btn-primary waves-effect waves-light" id="bulk-download-btn">Download <i class="ri-download-line align-middle ms-1"></i></button>
@@ -142,6 +156,7 @@
                 language: $('#language').val() || "",
                 country: $('#country').val() || "",
                 page: page,
+                search_query: $('#search_event').val().trim()
             };
             $('.filter-option:checked').each(function() {
                 let filterName = $(this).data('filter');
@@ -193,6 +208,9 @@
         }
         $(document).on('change', '.filter-option, #language, #country', function() {
             fetchAssets();
+        });
+        $('#search_event').on('input', function() {
+            fetchAssets(); // Fetch events on search input
         });
         $(document).on('click', '.download-single', function() {
             let asset_id = $(this).data('id'); 

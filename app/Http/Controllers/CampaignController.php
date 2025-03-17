@@ -15,10 +15,19 @@ class CampaignController extends Controller
         $this->middleware('permission:campaign-delete', ['only' => ['destroy']]);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $campaigns = Campaign::latest()->paginate(10);
-        return view('admin.campaigns.index', compact('campaigns'));
+        $query = Campaign::orderBy('id','ASC');
+        if (isset($request->search)) {
+            if ($request->name) {
+                $name = $request->name;
+                $name = trim($request->name, '"');
+                $query->where('campaigns.name', 'like', '%' . $name . '%');
+            }
+        }
+        $campaigns  =   $query->get();
+
+        return view('admin.campaigns.index', compact('request','campaigns'));
     }
 
     public function create()
