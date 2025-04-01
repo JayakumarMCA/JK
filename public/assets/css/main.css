@@ -52,7 +52,12 @@ body[data-layout=horizontal][data-topbar=light] .topnav
 }
 .ratinglabel
 {
+<<<<<<< HEAD
   font-size: 15px;
+=======
+  /* font-size: 15px; */
+  font-size: 14px;
+>>>>>>> 6f0f4a0e7c364806cd18c9a6b5a00fe9555112fe
   font-weight: 400;
 }
 .filterborder{
