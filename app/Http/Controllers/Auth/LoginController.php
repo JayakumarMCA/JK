@@ -51,7 +51,7 @@ class LoginController extends Controller
         ]);
 
         if (Auth::attempt($request->only('email', 'password'))) {
-            return redirect()->intended('/dashboard');
+            return redirect()->intended('/get-assets');
         }
 
         return back()->withErrors(['email' => 'Invalid login credentials']);
@@ -60,10 +60,8 @@ class LoginController extends Controller
     public function logout(Request $request)
     {
         Auth::logout();
-
         $request->session()->invalidate(); 
         $request->session()->regenerateToken();
-
         return redirect()->route('login')->with('success', 'You have been logged out successfully.');
     }
 

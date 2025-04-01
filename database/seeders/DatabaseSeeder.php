@@ -14,7 +14,6 @@ class DatabaseSeeder extends Seeder
     {
         // Run Role Permission Seeder
         $this->call(RolePermissionSeeder::class);
-        $this->call(IndustryProductSeeder::class);
 
         // Create Users
         $admin = User::create([
